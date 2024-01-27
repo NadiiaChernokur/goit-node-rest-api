@@ -3,12 +3,11 @@ import morgan from "morgan";
 import cors from "cors";
 
 import contactsRouter from "./routes/contactsRouter.js";
-
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-// p7YB6b10Tbw8zq4v;
-const DB_HOST =
-  "mongodb+srv://Nadiia:p7YB6b10Tbw8zq4v@nich.zuifzce.mongodb.net/db-contacts?retryWrites=true&w=majority";
+dotenv.config();
+const { DB_HOST } = process.env;
 mongoose
   .connect(DB_HOST)
   .then(() => {
