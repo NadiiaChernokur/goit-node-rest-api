@@ -1,6 +1,7 @@
-import { HttpError } from "./HttpError.js";
+import HttpError from "./HttpError.js";
+import { isValidObjectId } from "mongoose";
 
-const validateBody = (schema) => {
+export const validateBody = (schema) => {
   const func = (req, _, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -12,4 +13,10 @@ const validateBody = (schema) => {
   return func;
 };
 
-export default validateBody;
+export const isValidId = (req, res, next) => {
+  const { id } = req.params;
+  if (!isValidObjectId(id)) {
+    next(HttpError(400, `${id} is not valid`));
+  }
+  next();
+};

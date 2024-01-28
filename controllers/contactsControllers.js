@@ -1,12 +1,4 @@
-// import {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   toUpdateContact,
-// } from "../services/contactsServices.js";
 import { Contact } from "../db/contact.js";
-
 import HttpError from "../helpers/HttpError.js";
 import {
   createContactSchema,
@@ -78,7 +70,7 @@ export const favoriteContact = async (req, res, next) => {
     if (!id) throw HttpError(404);
 
     if (Object.keys(req.body).length === 0)
-      throw HttpError(400, "Body must have at least one field");
+      throw HttpError(400, "missing field favorite");
 
     const { error } = updateFavoriteSchema.validate(req.body);
     if (error) throw HttpError(400, "missing field favorite");
