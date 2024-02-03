@@ -1,11 +1,15 @@
 import { User } from "../db/user.js";
-import { createUserSchema } from "../schemas/contactsSchemas.js";
+import {
+  createUserSchema,
+  updateSubscription,
+} from "../schemas/contactsSchemas.js";
 import RegisterHttpError from "../helpers/RegisterHttpError.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
 
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+
 dotenv.config();
 const { SECRET_KEY } = process.env;
 
@@ -53,4 +57,17 @@ export const getUser = async (req, res, next) => {
   const { email, subscription } = req.user;
   //   await User.findByIdAndUpdate(_id, { token: "" });
   res.status(200).json({ email, subscription });
+};
+
+export const changeSubscription = async (req, res, next) => {
+  const { _id } = req.user;
+
+  if (Object.keys(req.body).length === 0)
+    throw HttpError(400, "Body must have at least one field");
+
+  const { error } = updateSubscription.validate(req.body);
+  if (error) throw HttpError(400, error.message);
+  const update = await User.findByIdAndUpdate(_id, req.body);
+
+  res.json({ message: "Subscription updated successfully" });
 };

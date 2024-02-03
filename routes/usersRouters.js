@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  changeSubscription,
   createUser,
   getUser,
   loginUser,
@@ -8,6 +9,7 @@ import {
 import { isValidToken } from "../helpers/validateBody.js";
 
 const usersRouter = express.Router();
+usersRouter.patch("/", isValidToken, changeSubscription);
 usersRouter.post("/register", createUser);
 usersRouter.post("/login", loginUser);
 usersRouter.post("/logout", isValidToken, logoutUser);
