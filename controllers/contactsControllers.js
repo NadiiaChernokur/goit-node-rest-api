@@ -7,8 +7,21 @@ import {
 
 export const getAllContacts = async (req, res) => {
   try {
-    const contacts = await Contact.find();
-    res.json(contacts);
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 10, favorite } = req.query;
+
+    const skip = (page - 1) * limit;
+    if (favorite !== undefined) {
+      const contacts = await Contact.find({ owner, favorite: favorite })
+        .skip(skip)
+        .limit(limit);
+
+      res.json(contacts);
+    } else {
+      const contacts = await Contact.find({ owner }).skip(skip).limit(limit);
+
+      res.json(contacts);
+    }
   } catch (error) {
     res.json(HttpError(404));
   }
@@ -38,9 +51,10 @@ export const deleteContact = async (req, res, next) => {
 
 export const createContact = async (req, res, next) => {
   try {
+    const { _id: owner } = req.user;
     const { error } = createContactSchema.validate(req.body);
     if (error) throw HttpError(400, error.message);
-    const result = await Contact.create(req.body);
+    const result = await Contact.create({ ...req.body, owner });
     res.status(201).json(result);
   } catch (error) {
     next(error);
