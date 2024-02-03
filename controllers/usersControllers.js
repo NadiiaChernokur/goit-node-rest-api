@@ -60,14 +60,24 @@ export const getUser = async (req, res, next) => {
 };
 
 export const changeSubscription = async (req, res, next) => {
-  const { _id } = req.user;
+  try {
+    const { _id } = req.user;
 
-  if (Object.keys(req.body).length === 0)
-    throw HttpError(400, "Body must have at least one field");
+    if (Object.keys(req.body).length === 0)
+      throw HttpError(400, "missing field Subscription");
 
-  const { error } = updateSubscription.validate(req.body);
-  if (error) throw HttpError(400, error.message);
-  const update = await User.findByIdAndUpdate(_id, req.body);
+    const { error } = updateSubscription.validate(req.body);
+    if (error)
+      throw HttpError(
+        400,
+        "Choose one of three values: 'starter', 'pro', 'business'"
+      );
 
-  res.json({ message: "Subscription updated successfully" });
+    const update = await User.findByIdAndUpdate(_id, req.body, { new: true });
+    if (!update) throw HttpError(404);
+
+    res.json({ message: "Subscription updated successfully" });
+  } catch (error) {
+    next(error);
+  }
 };
