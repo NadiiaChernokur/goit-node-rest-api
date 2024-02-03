@@ -7,20 +7,20 @@ import {
   updateContact,
   favoriteContact,
 } from "../controllers/contactsControllers.js";
-import { isValidId } from "../helpers/validateBody.js";
+import { isValidId, isValidToken } from "../helpers/validateBody.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", getAllContacts);
+contactsRouter.get("/", isValidToken, getAllContacts);
 
-contactsRouter.get("/:id", isValidId, getOneContact);
+contactsRouter.get("/:id", isValidToken, isValidId, getOneContact);
 
-contactsRouter.delete("/:id", isValidId, deleteContact);
+contactsRouter.delete("/:id", isValidToken, isValidId, deleteContact);
 
-contactsRouter.post("/", createContact);
+contactsRouter.post("/", isValidToken, createContact);
 
-contactsRouter.put("/:id", isValidId, updateContact);
+contactsRouter.put("/:id", isValidToken, isValidId, updateContact);
 
-contactsRouter.patch("/:id/favorite", isValidId, favoriteContact);
+contactsRouter.patch("/:id/favorite", isValidToken, isValidId, favoriteContact);
 
 export default contactsRouter;

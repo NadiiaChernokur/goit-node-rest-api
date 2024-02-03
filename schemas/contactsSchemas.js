@@ -14,3 +14,10 @@ export const updateFavoriteSchema = Joi.object({
   phone: Joi.string(),
   favorite: Joi.boolean().required(),
 });
+
+export const createUserSchema = Joi.object({
+  email: Joi.string()
+    .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+    .required(),
+  password: Joi.string().min(6).required(),
+});
