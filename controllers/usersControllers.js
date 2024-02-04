@@ -2,7 +2,7 @@ import { User } from "../db/user.js";
 import {
   createUserSchema,
   updateSubscription,
-} from "../schemas/contactsSchemas.js";
+} from "../schemas/userSchemas.js";
 import RegisterHttpError from "../helpers/RegisterHttpError.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
@@ -41,7 +41,7 @@ export const loginUser = async (req, res, next) => {
     const payload = { id: user._id };
     const { subscription } = user;
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-
+    await User.findByIdAndUpdate(user._id, { token });
     res.status(200).json({ token: token, user: { email, subscription } });
   } catch (error) {
     next(error);
@@ -55,7 +55,6 @@ export const logoutUser = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
   const { email, subscription } = req.user;
-  //   await User.findByIdAndUpdate(_id, { token: "" });
   res.status(200).json({ email, subscription });
 };
 

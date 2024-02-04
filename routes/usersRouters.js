@@ -6,7 +6,7 @@ import {
   loginUser,
   logoutUser,
 } from "../controllers/usersControllers.js";
-import { isValidToken } from "../helpers/validateBody.js";
+import { isValidToken } from "../helpers/isValidToken.js";
 
 const usersRouter = express.Router();
 usersRouter.patch("/", isValidToken, changeSubscription);
