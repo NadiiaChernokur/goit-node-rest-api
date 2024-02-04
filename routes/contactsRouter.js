@@ -7,7 +7,9 @@ import {
   updateContact,
   favoriteContact,
 } from "../controllers/contactsControllers.js";
-import { isValidId, isValidToken } from "../helpers/validateBody.js";
+
+import { isValidId } from "../helpers/isValidId.js";
+import { isValidToken } from "../helpers/isValidToken.js";
 
 const contactsRouter = express.Router();
 
