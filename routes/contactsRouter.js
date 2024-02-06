@@ -42,6 +42,12 @@ contactsRouter.put(
   updateContact
 );
 
-contactsRouter.patch("/:id/favorite", isValidToken, isValidId, favoriteContact);
+contactsRouter.patch(
+  "/:id/favorite",
+  isValidToken,
+  isValidId,
+  isOwnerValid,
+  favoriteContact
+);
 
 export default contactsRouter;
