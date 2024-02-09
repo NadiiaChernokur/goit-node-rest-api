@@ -31,6 +31,8 @@ export const createUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   try {
+    const { error } = createUserSchema.validate(req.body);
+    if (error) throw RegisterHttpError(error);
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 

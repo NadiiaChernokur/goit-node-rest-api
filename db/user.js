@@ -15,6 +15,10 @@ const userSchems = new Schema({
     enum: ["starter", "pro", "business"],
     default: "starter",
   },
+  token: {
+    type: String,
+    unique: true,
+  },
 });
 
 export const User = model("user", userSchems);
