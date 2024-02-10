@@ -6,6 +6,7 @@ import {
 import RegisterHttpError from "../helpers/RegisterHttpError.js";
 import bcrypt from "bcrypt";
 import HttpError from "../helpers/HttpError.js";
+import gravatar from "gravatar";
 
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
@@ -17,13 +18,16 @@ export const createUser = async (req, res, next) => {
   try {
     const { error } = createUserSchema.validate(req.body);
     if (error) throw RegisterHttpError(error);
-    const { password } = req.body;
+    const { email, password } = req.body;
     const hashPassword = await bcrypt.hash(password, 10);
-    const { email, subscription } = await User.create({
+    const avatarURL = gravatar.url(email);
+    const { subscription } = await User.create({
       ...req.body,
+      avatarURL,
       password: hashPassword,
     });
-    res.status(201).json({ user: { email, subscription } });
+
+    res.status(201).json({ user: { email, subscription, avatarURL } });
   } catch (error) {
     next(error);
   }
@@ -83,7 +87,7 @@ export const changeSubscription = async (req, res, next) => {
   }
 };
 
-export const getAvatar = async (req, res, next) => {
-  const { email, subscription } = req.user;
-  res.status(200).json({ email, subscription });
-};
+// export const getAvatar = async (req, res, next) => {
+//   const { email, subscription } = req.user;
+//   res.status(200).json({ email, subscription });
+// };
