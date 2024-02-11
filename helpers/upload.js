@@ -1,12 +1,11 @@
 import multer from "multer";
 import path from "path";
-
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import fs from "fs/promises";
 import { User } from "../db/user.js";
-
 import Jimp from "jimp";
+import HttpError from "./HttpError.js";
 
 const filename = fileURLToPath(import.meta.url);
 const urlString = dirname(filename);
@@ -24,6 +23,10 @@ export const upload = multer({
 export const getNewAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user;
+
+    if (req.file === undefined) {
+      throw HttpError(400, "This field must not be empty");
+    }
 
     const { path: altPath, originalname } = req.file;
     const newUserName = _id + originalname;

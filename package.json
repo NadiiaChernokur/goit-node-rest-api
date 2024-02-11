@@ -5,7 +5,8 @@
     "start": "node ./app.js",
     "starts": "node ./controllers/contactsControllers.js",
     "yu": "node ./services/contactsServices.js",
-    "dev": "nodemon ./app.js"
+    "dev": "nodemon ./app.js",
+    "test": "jest"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -23,6 +24,7 @@
     "npm": "^10.4.0"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.0.2"
   }
 }
