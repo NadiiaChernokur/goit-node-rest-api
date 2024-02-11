@@ -1,6 +1,6 @@
 import HttpError from "./HttpError.js";
-import jwt from "jsonwebtoken";
-import { User } from "../db/user.js";
+// import jwt from "jsonwebtoken";
+// import { User } from "../db/user.js";
 import dotenv from "dotenv";
 import { Contact } from "../db/contact.js";
 dotenv.config();
