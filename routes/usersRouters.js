@@ -5,6 +5,8 @@ import {
   getUser,
   loginUser,
   logoutUser,
+  resendVerifyUser,
+  toVerifyUser,
 } from "../controllers/usersControllers.js";
 import { isValidToken } from "../helpers/isValidToken.js";
 import { getNewAvatar, upload } from "../helpers/upload.js";
@@ -21,5 +23,7 @@ usersRouter.patch(
   upload.single("avatar"),
   getNewAvatar
 );
+usersRouter.get("/verify/:verificationToken", toVerifyUser);
+usersRouter.post("/verify", resendVerifyUser);
 
 export default usersRouter;
