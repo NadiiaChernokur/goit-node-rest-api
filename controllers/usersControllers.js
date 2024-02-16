@@ -44,10 +44,14 @@ export const createUser = async (req, res, next) => {
 export const toVerifyUser = async (req, res, next) => {
   try {
     const { verificationToken } = req.params;
+
     const user = await User.findOne({ verificationToken });
+
     if (!user) throw HttpError(401, "Email not found");
-    await User.findByIdAndUpdate(user_id),
-      { verify: true, verificationToken: "" };
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+      verificationToken: "",
+    });
     res.json({ messege: "Verification successful " });
   } catch (error) {
     next(error);
@@ -55,10 +59,13 @@ export const toVerifyUser = async (req, res, next) => {
 };
 export const resendVerifyUser = async (req, res, next) => {
   try {
-    const { error } = emailUserSchema(req.body);
+    const { error } = emailUserSchema.validate(req.body);
+
     if (error) throw RegisterHttpError(error);
     const { email } = req.body;
-    const user = User.findOne({ email });
+
+    const user = await User.findOne({ email });
+
     if (!user) throw HttpError(401, "Email not found");
     if (user.verify) throw HttpError(401, "Email alredy verify");
     const verifyEmail = {
@@ -68,7 +75,9 @@ export const resendVerifyUser = async (req, res, next) => {
     };
     await sendEmail(verifyEmail);
     res.json({ messege: "Verify email send success" });
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const loginUser = async (req, res, next) => {
